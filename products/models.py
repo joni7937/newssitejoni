@@ -1,6 +1,6 @@
 from django.db import models
 
-# models.py, admin.py, views.py, urls.py
+
 class CategoryModel(models.Model):
     title = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -16,7 +16,6 @@ class CategoryModel(models.Model):
 
 class ProductModel(models.Model):
     title = models.CharField(max_length=50)
-    price = models.IntegerField(default=0)
     category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE, null=True, blank=True)
     image = models.FileField(upload_to='products')
     descriptions = models.TextField(blank=True, null=True)

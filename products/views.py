@@ -1,14 +1,41 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import ListView
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
 from .models import CategoryModel
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 # models.py, admin.py, views.py, urls.py
 
 # def home_page(request):
 #     return HttpResponse("<h1>Hello</h1>")
-from products.forms import FormModelForm
 from products.models import ProductModel
+
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
+
+def login(request):
+    return HttpResponse("Авторизация")
+
+
+
+class RegisterUser(CreateView):
+   form_class = UserCreationForm
+   template_name = 'register.html'
+   success_url = reverse_lazy('login')
+
+   def get_context_data(self, **kwargs):
+       context = super().get_context_data(**kwargs)
+       context['title'] = "Регистрация"
+       return context
+
+
+
 
 
 def index_page(request):
@@ -23,13 +50,11 @@ def index_page(request):
 #     return render(request, 'shop.html', {'products': products})
 
 
-
-
 class ShopPageView(ListView):
     template_name = 'shop.html'
     queryset = ProductModel.objects.all()
     context_object_name = 'products'
-    paginate_by = 1
+    paginate_by = 10
 
     def get_queryset(self):
         qs = ProductModel.objects.all()
